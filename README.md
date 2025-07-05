@@ -51,8 +51,19 @@ pip list
 Run these commands on **etcd node (10.0.0.10)**:
 ```bash
 sudo apt update
+sudo apt install -y net-tools curl tar
 sudo hostnamectl set-hostname etcdnode
-sudo apt install -y net-tools etcd
+ETCD_VER=v3.5.13
+
+
+wget https://github.com/etcd-io/etcd/releases/download/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz
+tar xzvf etcd-${ETCD_VER}-linux-amd64.tar.gz
+cd etcd-${ETCD_VER}-linux-amd64
+sudo mv etcd etcdctl /usr/local/bin/
+cd ~
+sudo useradd -r -s /sbin/nologin etcd
+sudo mkdir -p /var/lib/etcd
+sudo chown etcd:etcd /var/lib/etcd
 ```
 Edit the etcd configuration:
 ```bash
