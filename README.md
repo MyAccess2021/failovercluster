@@ -50,6 +50,9 @@ sudo chown -R postgres:postgres /data/patroni
 sudo ufw allow 5432
 sudo ufw allow 8008
 sudo chown -R ubuntu:ubuntu /data/patroni
+sudo apt install patroni
+sudo systemctl restart patroni
+sudo systemctl status patroni
 ```
 ```
 sudo systemctl enable patroni
@@ -363,6 +366,16 @@ Stop the master node to check the replica becomes master or not
 now check the patroni status 
 ```bash 
     patronictl -c /etc/patroni.yml list
+```
+If you got any troubles in the pgs 
+```
+sudo apt install patroni
+sudo systemctl stop patroni
+sudo rm -rf /data/patroni
+sudo mkdir -p /data/patroni
+sudo chown ubuntu:ubuntu /data/patroni   # or postgres:postgres based on your service file
+sudo chmod 700 /data/patroni
+
 ```
 
 
