@@ -5,7 +5,7 @@
 - **Node1 (Primary)**: 10.0.0.5
 - **Node2 (Replica)**: 10.0.0.7
 - **Node3 (Replica)**: 10.0.0.8
-- **HAProxy node**: 192.168.68.140
+- **HAProxy node**: 10.0.0.9
 
 ## **Step 1: Setup PostgreSQL Nodes (node1, node2)**
 
@@ -99,7 +99,7 @@ sudo ufw allow 2379
 
 ## **Step 3: Setup HAProxy Node**
 
-Run these commands on **HAProxy node (192.168.68.140)**:
+Run these commands on **HAProxy node (10.0.0.9)**:
 ```bash
 sudo apt update
 sudo hostnamectl set-hostname haproxynode
@@ -341,7 +341,7 @@ psql -h 10.0.0.8 -p 5432 -U postgres -W
 ```
 Check PostgreSQL connection via HAProxy:
 ```bash
-psql -h 192.168.68.140 -p 5000 -U postgres -W
+psql -h 10.0.0.9 -p 5000 -U postgres -W
 ```
 
 Check HAProxy status:
