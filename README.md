@@ -43,6 +43,8 @@ pip install patroni python-etcd
 
 # Step 7: Verify packages (optional)
 pip list
+sudo apt update
+sudo apt install postgresql -y
 sudo mkdir -p /data/patroni
 sudo chown -R postgres:postgres /data/patroni
 sudo chown -R ubuntu:ubuntu /data/patroni
