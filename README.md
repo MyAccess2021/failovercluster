@@ -48,6 +48,8 @@ sudo apt install postgresql -y
 sudo mkdir -p /data/patroni
 sudo chown -R postgres:postgres /data/patroni
 sudo chown -R ubuntu:ubuntu /data/patroni
+```
+```
 sudo systemctl enable patroni
 
 ```
@@ -198,6 +200,11 @@ Environment=PATH=/home/ubuntu/patroni-venv/bin:/usr/bin:/bin
 [Install]
 WantedBy=multi-user.target
 
+```
+```
+sudo systemctl daemon-reload
+sudo systemctl enable patroni
+sudo systemctl start patroni
 ```
 
 ## **Step 5: Configure Patroni on node2**
