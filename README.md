@@ -43,6 +43,10 @@ pip install patroni python-etcd
 
 # Step 7: Verify packages (optional)
 pip list
+sudo mkdir -p /data/patroni
+sudo chown -R postgres:postgres /data/patroni
+sudo chown -R ubuntu:ubuntu /data/patroni
+sudo systemctl enable patroni
 
 ```
 
@@ -54,8 +58,6 @@ sudo apt update
 sudo apt install -y net-tools curl tar
 sudo hostnamectl set-hostname etcdnode
 ETCD_VER=v3.5.13
-
-
 wget https://github.com/etcd-io/etcd/releases/download/${ETCD_VER}/etcd-${ETCD_VER}-linux-amd64.tar.gz
 tar xzvf etcd-${ETCD_VER}-linux-amd64.tar.gz
 cd etcd-${ETCD_VER}-linux-amd64
@@ -63,7 +65,7 @@ sudo mv etcd etcdctl /usr/local/bin/
 cd ~
 sudo useradd -r -s /sbin/nologin etcd
 sudo mkdir -p /var/lib/etcd
-sudo chown etcd:etcd /var/lib/etcd
+sudo chown -R etcd:etcd /var/lib/etcd
 ```
 Edit the etcd configuration:
 ```bash
@@ -71,11 +73,7 @@ sudo nano /etc/default/etcd
 ```
 Add the following lines:
 ```bash
-## etcd(1) daemon options
-## See "/usr/share/doc/etcd-server/op-guide/configuration.md.gz"
-## for available options.
-##
-## Use environment to override, for example: ETCD_NAME=default
+ETCD_DATA_DIR="/var/lib/etcd"
 ETCD_LISTEN_PEER_URLS="http://10.0.0.10:2380"
 ETCD_LISTEN_CLIENT_URLS="http://localhost:2379,http://10.0.0.10:2379"
 ETCD_INITIAL_ADVERTISE_PEER_URLS="http://10.0.0.10:2380"
@@ -83,13 +81,16 @@ ETCD_INITIAL_CLUSTER="default=http://10.0.0.10:2380"
 ETCD_ADVERTISE_CLIENT_URLS="http://10.0.0.10:2379"
 ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster"
 ETCD_INITIAL_CLUSTER_STATE="new"
-ETCD_ENABLE_V2="true"
 ```
 Restart and verify etcd:
 ```bash
+sudo chown -R etcd:etcd /var/lib/etcd
+sudo systemctl daemon-reload
 sudo systemctl restart etcd
-sudo systemctl status etcd
+sudo systemctl status etcd   
 curl http://10.0.0.10:2379/members
+sudo ufw allow 2379
+
 ```
 
 ## **Step 3: Setup HAProxy Node**
@@ -145,6 +146,7 @@ bootstrap:
 postgresql:
   listen: 10.0.0.5:5432
   connect_address: 10.0.0.5:5432
+  bin_dir: /usr/lib/postgresql/16/bin
   data_dir: /data/patroni
   pgpass: /tmp/pgpass
   authentication:
@@ -236,6 +238,7 @@ bootstrap:
 postgresql:
   listen: 10.0.0.7:5432
   connect_address: 10.0.0.7:5432
+  bin_dir: /usr/lib/postgresql/16/bin
   data_dir: /data/patroni
   pgpass: /tmp/pgpass
   authentication:
