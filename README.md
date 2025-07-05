@@ -47,9 +47,9 @@ sudo apt update
 sudo apt install postgresql -y
 sudo mkdir -p /data/patroni
 sudo chown -R postgres:postgres /data/patroni
-sudo chown -R ubuntu:ubuntu /data/patroni
 sudo ufw allow 5432
 sudo ufw allow 8008
+sudo chown -R ubuntu:ubuntu /data/patroni
 ```
 ```
 sudo systemctl enable patroni
