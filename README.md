@@ -361,11 +361,11 @@ sudo journalctl -u patroni --no-pager
 ## **Step 9: To verify the failover**
 Stop the master node to check the replica becomes master or not 
 ```bash
-    sudo systemctl stop patroni
+sudo systemctl stop patroni
 ```
 now check the patroni status 
 ```bash 
-    patronictl -c /etc/patroni.yml list
+patronictl -c /etc/patroni.yml list
 ```
 If you got any troubles in the pgs 
 ```
