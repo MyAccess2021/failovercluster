@@ -377,6 +377,10 @@ sudo chown ubuntu:ubuntu /data/patroni   # or postgres:postgres based on your se
 sudo chmod 700 /data/patroni
 
 ```
+To change the leader 
+```
+patronictl -c /etc/patroni.yml failover
+```
 Here’s a breakdown of **all the ports** that you need to **open/unblock (via firewall or security group)** **per node** for your High Availability PostgreSQL Cluster to work correctly:
 
 ---
