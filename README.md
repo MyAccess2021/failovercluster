@@ -377,6 +377,82 @@ sudo chown ubuntu:ubuntu /data/patroni   # or postgres:postgres based on your se
 sudo chmod 700 /data/patroni
 
 ```
+Here’s a breakdown of **all the ports** that you need to **open/unblock (via firewall or security group)** **per node** for your High Availability PostgreSQL Cluster to work correctly:
+
+---
+
+### ✅ **1. etcd Node (10.0.0.10)**
+
+* `2379`: etcd client communication port (used by Patroni)
+* `2380`: etcd peer communication (used for internal etcd clustering)
+
+```bash
+sudo ufw allow 2379
+sudo ufw allow 2380
+```
+
+---
+
+### ✅ **2. Node1 (Primary) - 10.0.0.5**
+
+* `5432`: PostgreSQL (client connections, replication)
+* `8008`: Patroni REST API (used for health checks by HAProxy)
+
+```bash
+sudo ufw allow 5432
+sudo ufw allow 8008
+```
+
+---
+
+### ✅ **3. Node2 (Replica) - 10.0.0.7**
+
+* `5432`: PostgreSQL (replication, client connections)
+* `8008`: Patroni REST API
+
+```bash
+sudo ufw allow 5432
+sudo ufw allow 8008
+```
+
+---
+
+### ✅ **4. Node3 (Replica) - 10.0.0.8**
+
+* `5432`: PostgreSQL (replication, client connections)
+* `8008`: Patroni REST API
+
+```bash
+sudo ufw allow 5432
+sudo ufw allow 8008
+```
+
+---
+
+### ✅ **5. HAProxy Node (10.0.0.9)**
+
+* `5000`: PostgreSQL client connections (proxied to cluster)
+* `7000`: HAProxy statistics interface (optional for monitoring)
+
+```bash
+sudo ufw allow 5000
+sudo ufw allow 7000
+```
+
+---
+
+### ✅ **Summary Table**
+
+| **Node**           | **Open Ports** | **Purpose**                          |
+| ------------------ | -------------- | ------------------------------------ |
+| etcd (10.0.0.10)   | 2379, 2380     | etcd client + peer communication     |
+| node1 (10.0.0.5)   | 5432, 8008     | PostgreSQL + Patroni REST API        |
+| node2 (10.0.0.7)   | 5432, 8008     | PostgreSQL + Patroni REST API        |
+| node3 (10.0.0.8)   | 5432, 8008     | PostgreSQL + Patroni REST API        |
+| HAProxy (10.0.0.9) | 5000, 7000     | Client entry point + stats dashboard |
+
+Let me know if you want a firewall command list for all of them!
+
 
 
 ## As  you can see the graphical representation of High Availabilty and Failover Cluster 
