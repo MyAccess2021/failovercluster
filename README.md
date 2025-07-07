@@ -375,6 +375,12 @@ sudo rm -rf /data/patroni
 sudo mkdir -p /data/patroni
 sudo chown ubuntu:ubuntu /data/patroni   # or postgres:postgres based on your service file
 sudo chmod 700 /data/patroni
+```
+```
+sudo systemctl stop patroni
+sudo rm -rf /data/patroni/*
+sudo systemctl start patroni
+
 
 ```
 To change the leader 
