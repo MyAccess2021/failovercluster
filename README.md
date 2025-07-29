@@ -91,6 +91,38 @@ ETCD_ADVERTISE_CLIENT_URLS="http://10.0.0.10:2379"
 ETCD_INITIAL_CLUSTER_TOKEN="etcd-cluster"
 ETCD_INITIAL_CLUSTER_STATE="new"
 ```
+And also Add this following conf
+```bash
+sudo nano /etc/systemd/system/etcd.service
+```
+```bash
+[Unit]
+Description=etcd key-value store
+Documentation=https://github.com/etcd-io/etcd
+After=network.target
+
+[Service]
+User=etcd
+Type=notify
+ExecStart=/usr/local/bin/etcd \
+  --data-dir=/var/lib/etcd \
+  --name default \
+  --initial-advertise-peer-urls http://10.0.0.13:2380 \
+  --listen-peer-urls http://10.0.0.13:2380 \
+  --listen-client-urls http://localhost:2379,http://10.0.0.13:2379 \
+  --advertise-client-urls http://10.0.0.13:2379 \
+  --initial-cluster default=http://10.0.0.13:2380 \
+  --initial-cluster-token etcd-cluster \
+  --initial-cluster-state new \
+  --enable-v2=true
+
+Restart=on-failure
+LimitNOFILE=40000
+
+[Install]
+WantedBy=multi-user.target
+
+```
 Restart and verify etcd:
 ```bash
 sudo chown -R etcd:etcd /var/lib/etcd
@@ -375,8 +407,6 @@ sudo rm -rf /data/patroni
 sudo mkdir -p /data/patroni
 sudo chown ubuntu:ubuntu /data/patroni   # or postgres:postgres based on your service file
 sudo chmod 700 /data/patroni
-```
-```
 sudo systemctl stop patroni
 sudo rm -rf /data/patroni/*
 sudo systemctl start patroni
