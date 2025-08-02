@@ -50,7 +50,7 @@ sudo chown -R postgres:postgres /data/patroni
 sudo ufw allow 5432
 sudo ufw allow 8008
 sudo chown -R ubuntu:ubuntu /data/patroni
-sudo apt install patroni
+sudo apt install patroni -y
 sudo systemctl restart patroni
 sudo systemctl status patroni
 ```
