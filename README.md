@@ -361,7 +361,7 @@ sudo systemctl enable haproxy
 ```
 Then Download the postgresql client
 ```bash
-sudo apt install postgresql-client-16
+sudo apt install -y postgresql-client-16
 ```
 
 ## **Step 8: Verify Cluster Functionality**
